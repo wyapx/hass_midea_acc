@@ -2,6 +2,9 @@
   "domain": "midea",
   "name": "Midea HVAC LAN Controller",
   "documentation": "",
+  "config_flow": true,
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/wyapx/hass_midea_acc/issues",
   "requirements": [
     "msmart"
   ],
