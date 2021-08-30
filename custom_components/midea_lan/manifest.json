@@ -11,6 +11,5 @@
   "codeowners": [
     "@wyapx"
   ],
-  "homeassistant": "0.96.0",
   "version": "2021.8.31"
 }
