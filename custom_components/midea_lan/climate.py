@@ -1,3 +1,4 @@
+import logging
 from typing import Optional, List
 
 from homeassistant.const import TEMP_CELSIUS, ATTR_TEMPERATURE
@@ -12,10 +13,13 @@ from .aiomart.discover import scan
 
 SUPPORT_FLAGS = SUPPORT_TARGET_TEMPERATURE | SUPPORT_FAN_MODE | SUPPORT_SWING_MODE | SUPPORT_PRESET_MODE
 
+_LOGGER = logging.getLogger(__name__)
+
 
 async def async_setup_platform(hass: HomeAssistant, config: Config, async_add_entities, discovery_info=None):
     devices = await scan()
     entities = []
+    _LOGGER.info("%s devices found" % len(devices))
     for ip, data in devices.items():
         if data["type"] == "ac":
             device = await Device(ip, data["sn"], data["port"]).setup()
@@ -23,6 +27,7 @@ async def async_setup_platform(hass: HomeAssistant, config: Config, async_add_en
             entities.append(
                 MideaACDevice(hass, device, 0.5)
             )
+    _LOGGER.info("%s devices loaded" % len(entities))
     async_add_entities(entities)
 
 
