@@ -16,7 +16,7 @@ SUPPORT_FLAGS = SUPPORT_TARGET_TEMPERATURE | SUPPORT_FAN_MODE | SUPPORT_SWING_MO
 _LOGGER = logging.getLogger(__name__)
 
 
-async def async_setup_platform(hass: HomeAssistant, config: Config, async_add_entities, discovery_info=None):
+async def async_setup_entry(hass: HomeAssistant, config: Config, async_add_entities):
     devices = await scan()
     entities = []
     _LOGGER.info("%s devices found" % len(devices))
