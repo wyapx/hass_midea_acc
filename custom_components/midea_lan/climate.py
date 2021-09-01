@@ -16,7 +16,7 @@ SUPPORT_FLAGS = SUPPORT_TARGET_TEMPERATURE | SUPPORT_FAN_MODE | SUPPORT_SWING_MO
 _LOGGER = logging.getLogger(__name__)
 
 
-async def async_setup_entry(hass: HomeAssistant, config: Config, async_add_entities):
+async def async_setup_entry(hass: HomeAssistant, config: Config):
     devices = await scan()
     entities = []
     _LOGGER.info("%s devices found" % len(devices))
@@ -28,7 +28,10 @@ async def async_setup_entry(hass: HomeAssistant, config: Config, async_add_entit
                 MideaACDevice(hass, device, 0.5)
             )
     _LOGGER.info("%s devices loaded" % len(entities))
-    async_add_entities(entities)
+    if len(entities) > 0:
+        hass.data[config.entry_id] = {"climate_devices": entities}
+        return True
+    return False
 
 
 class MideaACDevice(ClimateDevice, RestoreEntity):
