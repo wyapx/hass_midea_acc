@@ -2,7 +2,7 @@ from typing import Optional, List
 
 from homeassistant.const import TEMP_CELSIUS, ATTR_TEMPERATURE
 from homeassistant.core import HomeAssistant
-from homeassistant.components.climate import ClimateDevice
+from homeassistant.components.climate import ClimateEntity
 from homeassistant.components.climate.const import *
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.restore_state import RestoreEntity
@@ -12,7 +12,7 @@ from .aiomart.aiomart import AC
 SUPPORT_FLAGS = SUPPORT_TARGET_TEMPERATURE | SUPPORT_FAN_MODE | SUPPORT_SWING_MODE | SUPPORT_PRESET_MODE
 
 
-class MideaACDevice(ClimateDevice, RestoreEntity):
+class MideaACDevice(ClimateEntity, RestoreEntity):
     def __init__(self, hass: HomeAssistant, device: AC, temp_step: float):
         self.hass = hass
         self.device = device
