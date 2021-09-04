@@ -114,3 +114,11 @@ class MideaACDevice(ClimateEntity, RestoreEntity):
     @property
     def swing_modes(self) -> List[str]:
         return [SWING_OFF, SWING_BOTH, SWING_VERTICAL, SWING_HORIZONTAL]
+
+    @property
+    def hvac_mode(self) -> str:
+        return self.device.operational_mode.name
+
+    @property
+    def hvac_modes(self) -> list[str]:
+        return self.device.operational_mode.list()
