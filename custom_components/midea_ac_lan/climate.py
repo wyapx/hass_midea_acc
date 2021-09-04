@@ -88,15 +88,15 @@ class MideaACDevice(ClimateEntity, RestoreEntity):
 
     async def async_set_fan_mode(self, fan_mode: str) -> None:
         from msmart.device import air_conditioning_device
-        self.device.fan_speed = air_conditioning_device.fan_speed_enum(fan_mode)
+        self.device.fan_speed = air_conditioning_device.fan_speed_enum(fan_mode).value
         await self.device.apply()
 
     async def async_set_hvac_mode(self, hvac_mode: str) -> None:
-        self.device.operational_mode = AC.operational_mode_enum(hvac_mode)
+        self.device.operational_mode = AC.operational_mode_enum(hvac_mode).value
         await self.device.apply()
 
     async def async_set_swing_mode(self, swing_mode: str) -> None:
-        self.device.swing_mode = AC.swing_mode_enum(swing_mode)
+        self.device.swing_mode = AC.swing_mode_enum(swing_mode).value
         await self.device.apply()
 
     async def async_set_preset_mode(self, preset_mode: str) -> None:
