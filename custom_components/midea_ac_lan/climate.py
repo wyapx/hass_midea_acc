@@ -1,5 +1,7 @@
+import logging
 from typing import Optional, List
 
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import TEMP_CELSIUS, ATTR_TEMPERATURE
 from homeassistant.core import HomeAssistant
 from homeassistant.components.climate import ClimateEntity
@@ -7,10 +9,31 @@ from homeassistant.components.climate.const import *
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.restore_state import RestoreEntity
 
-from .aiomart.aiomart import AC
+from .aiomart.aiomart import AC, Device
+from .aiomart.discover import scan
 
 SUPPORT_FLAGS = SUPPORT_TARGET_TEMPERATURE | SUPPORT_FAN_MODE | SUPPORT_SWING_MODE | SUPPORT_PRESET_MODE
 
+_LOGGER = logging.getLogger(__name__)
+
+
+async def async_setup_platform(hass: HomeAssistant, config_entry: ConfigEntry, add_entities, discovery_info=None):
+    devices = await scan()
+    entities = []
+    _LOGGER.warning("%s devices found" % len(devices))
+    for ip, data in devices.items():
+        if data["type"] == "ac":
+            device = await Device(ip, data["sn"], data["port"]).setup()
+            await device.refresh()
+            entities.append(
+                MideaACDevice(hass, device, 0.5)
+            )
+    if len(entities) > 0:
+        add_entities(entities)
+        _LOGGER.info("%s devices loaded" % len(entities))
+        return True
+    _LOGGER.warning("no devices loaded")
+    return False
 
 class MideaACDevice(ClimateEntity, RestoreEntity):
     def __init__(self, hass: HomeAssistant, device: AC, temp_step: float):
