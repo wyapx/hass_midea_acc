@@ -124,7 +124,15 @@ class MideaACDevice(ClimateEntity, RestoreEntity):
 
     @property
     def swing_mode(self) -> Optional[str]:
-        return self.device.swing_mode.name
+        value = self.device.swing_mode.value
+        if value == 0x0:
+            return SWING_OFF
+        elif value == 0xc:
+            return SWING_VERTICAL
+        elif value == 0x3:
+            return SWING_HORIZONTAL
+        elif value == 0xf:
+            return SWING_BOTH
 
     @property
     def swing_modes(self) -> List[str]:
@@ -132,7 +140,8 @@ class MideaACDevice(ClimateEntity, RestoreEntity):
 
     @property
     def hvac_mode(self) -> str:
-        return self.device.operational_mode.name
+        value = self.device.operational_mode.value
+        return self.hvac_modes[value]
 
     @property
     def hvac_modes(self) -> list[str]:
@@ -144,7 +153,19 @@ class MideaACDevice(ClimateEntity, RestoreEntity):
 
     @property
     def fan_mode(self) -> Optional[str]:
-        return self.device.fan_speed.name
+        from msmart.device import air_conditioning_device
+        enum = air_conditioning_device.fan_speed_enum
+        value = self.device.fan_speed.value
+        if value == enum.Auto:
+            return FAN_AUTO
+        elif value == enum.High:
+            return FAN_HIGH
+        elif value == enum.Medium:
+            return FAN_MEDIUM
+        elif value == enum.Low:
+            return FAN_MIDDLE
+        elif value == enum.Silent:
+            return FAN_LOW
 
     @property
     def fan_modes(self) -> list[str]:
