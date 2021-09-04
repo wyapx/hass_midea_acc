@@ -117,6 +117,8 @@ class MideaACDevice(ClimateEntity, RestoreEntity):
             return PRESET_ECO
         elif self.device.turbo_mode:
             return PRESET_BOOST
+        else:
+            return PRESET_NONE
 
     @property
     def preset_modes(self) -> List[str]:
@@ -141,7 +143,7 @@ class MideaACDevice(ClimateEntity, RestoreEntity):
     @property
     def hvac_mode(self) -> str:
         value = self.device.operational_mode.value
-        return self.hvac_modes[value]
+        return self.hvac_modes[value+1]
 
     @property
     def hvac_modes(self) -> list[str]:
