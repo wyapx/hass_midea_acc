@@ -138,9 +138,16 @@ class AC(air_conditioning_device):
             cmd.target_temperature = self._target_temperature
             if isinstance(self._operational_mode, self.operational_mode_enum):
                 cmd.operational_mode = self._operational_mode.value
-            cmd.operational_mode = self._operational_mode
-            cmd.fan_speed = self._fan_speed
-            cmd.swing_mode = self._swing_mode
+            else:
+                cmd.operational_mode = self._operational_mode
+            if isinstance(self._fan_speed, self.fan_speed_enum):
+                cmd.fan_speed = self._fan_speed.value
+            else:
+                cmd.fan_speed = self._fan_speed
+            if isinstance(self._swing_mode, self.swing_mode_enum):
+                cmd.swing_mode = self._swing_mode.value
+            else:
+                cmd.swing_mode = self._swing_mode
             cmd.eco_mode = self._eco_mode
             cmd.turbo_mode = self._turbo_mode
             pkt_builder = packet_builder(self.id)
