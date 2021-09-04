@@ -142,12 +142,12 @@ class MideaACDevice(ClimateEntity, RestoreEntity):
 
     @property
     def hvac_mode(self) -> str:
-        value = self.device.operational_mode.value
-        return self.hvac_modes[value+1]
+        value = self.device.operational_mode_enum.value
+        return self.hvac_modes[value-1]
 
     @property
     def hvac_modes(self) -> list[str]:
-        return [HVAC_MODE_AUTO, HVAC_MODE_DRY, HVAC_MODE_HEAT, HVAC_MODE_COOL, HVAC_MODE_FAN_ONLY]
+        return [HVAC_MODE_AUTO, HVAC_MODE_COOL, HVAC_MODE_DRY, HVAC_MODE_HEAT, HVAC_MODE_FAN_ONLY]
 
     @property
     def supported_features(self) -> int:
