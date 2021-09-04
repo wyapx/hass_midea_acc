@@ -29,7 +29,7 @@ _LOGGER = logging.getLogger(__name__)
 async def async_setup_platform(hass: HomeAssistant, config_entry: ConfigEntry, add_entities, discovery_info=None):
     devices_list = await scan()
     entities = []
-    _LOGGER.warning("%s devices_list found" % len(devices_list))
+    _LOGGER.warning("%s devices found" % len(devices_list))
     for device in devices_list:
         if device["type"] == "ac":
             ac_device = Device(device["ip"], device["device_id"], device["port"]).setup()
@@ -39,9 +39,9 @@ async def async_setup_platform(hass: HomeAssistant, config_entry: ConfigEntry, a
             )
     if len(entities) > 0:
         add_entities(entities)
-        _LOGGER.warning("%s devices_list loaded" % len(entities))
+        _LOGGER.warning("%s devices loaded" % len(entities))
         return True
-    _LOGGER.warning("no devices_list loaded")
+    _LOGGER.warning("no devices loaded")
     return False
 
 
@@ -142,7 +142,7 @@ class MideaACDevice(ClimateEntity, RestoreEntity):
 
     @property
     def hvac_mode(self) -> str:
-        value = self.device.operational_mode_enum.value
+        value = self.device.operational_mode.value
         return self.hvac_modes[value-1]
 
     @property
