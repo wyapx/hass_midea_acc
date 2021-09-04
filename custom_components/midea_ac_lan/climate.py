@@ -88,15 +88,15 @@ class MideaACDevice(ClimateEntity, RestoreEntity):
 
     async def async_set_fan_mode(self, fan_mode: str) -> None:
         from msmart.device import air_conditioning_device
-        self.device.fan_speed = air_conditioning_device.fan_speed_enum[fan_mode].value
+        self.device.fan_speed = air_conditioning_device.fan_speed_enum[fan_mode.title()]
         await self.device.apply()
 
     async def async_set_hvac_mode(self, hvac_mode: str) -> None:
-        self.device.operational_mode = AC.operational_mode_enum[hvac_mode].value
+        self.device.operational_mode = AC.operational_mode_enum[hvac_mode]
         await self.device.apply()
 
     async def async_set_swing_mode(self, swing_mode: str) -> None:
-        self.device.swing_mode = AC.swing_mode_enum[swing_mode.upper()].value
+        self.device.swing_mode = AC.swing_mode_enum[swing_mode.title()]
         await self.device.apply()
 
     async def async_set_preset_mode(self, preset_mode: str) -> None:
@@ -158,17 +158,17 @@ class MideaACDevice(ClimateEntity, RestoreEntity):
         from msmart.device import air_conditioning_device
         enum = air_conditioning_device.fan_speed_enum
         value = self.device.fan_speed.value
-        if value == enum.Auto:
+        if value == enum.Auto.value:
             return FAN_AUTO
-        elif value == enum.High:
+        elif value == enum.High.value:
             return FAN_HIGH
-        elif value == enum.Medium:
+        elif value == enum.Medium.value:
             return FAN_MEDIUM
-        elif value == enum.Low:
+        elif value == enum.Low.value:
             return FAN_MIDDLE
-        elif value == enum.Silent:
+        elif value == enum.Silent.value:
             return FAN_LOW
 
     @property
     def fan_modes(self) -> list[str]:
-        return [FAN_ON, FAN_AUTO, FAN_HIGH, FAN_MEDIUM, FAN_MIDDLE, FAN_LOW]
+        return [FAN_AUTO, FAN_HIGH, FAN_MEDIUM, FAN_MIDDLE, FAN_LOW]

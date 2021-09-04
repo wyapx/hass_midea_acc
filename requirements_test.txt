@@ -1,2 +1,2 @@
 pytest-homeassistant-custom-component==0.4.0
-msmart==0.1.24
+msmart

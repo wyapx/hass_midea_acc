@@ -27,8 +27,7 @@ class Lan(lan):
 
 
 class AC(air_conditioning_device):
-
-    """class fan_speed_enum(enum.IntEnum):
+    class fan_speed_enum(enum.IntEnum):
         Auto = 102
         High = 80
         Medium = 60
@@ -47,25 +46,6 @@ class AC(air_conditioning_device):
             #_LOGGER.debug("Unknown Fan Speed: {}".format(value))
             elif value < 0 or value > 100:
                 raise ValueError("The value must between 100 and 0")
-            return Value(value)"""
-
-    class fan_speed_enum(int):
-        def __init__(self, value):
-            self._value = value
-
-        def __str__(self) -> str:
-            return str(self._value)
-
-        def __int__(self) -> int:
-            return int(self._value)
-
-        @property
-        def value(self):
-            return self._value
-
-        @property
-        def key(self) -> str:
-            return "Any"
 
     class operational_mode_enum(enum.IntEnum):
         auto = 1
@@ -102,7 +82,7 @@ class AC(air_conditioning_device):
             #_LOGGER.debug("Unknown Swing Mode: {}".format(value))
             return air_conditioning_device.swing_mode_enum.Off
 
-    def __init__(self, device_ip: str, device_id: str, device_port: int):
+    def __init__(self, device_ip: str, device_id: int, device_port: int):
         super(AC, self).__init__(device_ip, device_id, device_port)
         self._lan_service = Lan(device_ip, device_id, device_port)
 
@@ -136,23 +116,14 @@ class AC(air_conditioning_device):
             cmd.prompt_tone = self._prompt_tone
             cmd.power_state = self._power_state
             cmd.target_temperature = self._target_temperature
-            if isinstance(self._operational_mode, self.operational_mode_enum):
-                cmd.operational_mode = self._operational_mode.value
-            else:
-                cmd.operational_mode = self._operational_mode
-            if isinstance(self._fan_speed, self.fan_speed_enum):
-                cmd.fan_speed = self._fan_speed.value
-            else:
-                cmd.fan_speed = self._fan_speed
-            if isinstance(self._swing_mode, self.swing_mode_enum):
-                cmd.swing_mode = self._swing_mode.value
-            else:
-                cmd.swing_mode = self._swing_mode
+            cmd.operational_mode = self._operational_mode.value
+            cmd.fan_speed = self._fan_speed.value
+            cmd.swing_mode = self._swing_mode.value
             cmd.eco_mode = self._eco_mode
             cmd.turbo_mode = self._turbo_mode
             pkt_builder = packet_builder(self.id)
             #            cmd.night_light = False
-            cmd.fahrenheit = self.farenheit_unit
+            cmd.fahrenheit = True
             pkt_builder.set_command(cmd)
 
             data = pkt_builder.finalize()
@@ -177,4 +148,4 @@ class AC(air_conditioning_device):
 
 class Device(device):
     def setup(self):
-        return AC(self._ip, str(self._id), self._port)
+        return AC(self._ip, self._id, self._port)

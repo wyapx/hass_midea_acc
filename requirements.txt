@@ -1,2 +1,2 @@
 homeassistant
-msmart==0.1.24
+msmart
