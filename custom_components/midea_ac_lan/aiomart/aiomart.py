@@ -136,6 +136,8 @@ class AC(air_conditioning_device):
             cmd.prompt_tone = self._prompt_tone
             cmd.power_state = self._power_state
             cmd.target_temperature = self._target_temperature
+            if isinstance(self._operational_mode, self.operational_mode_enum):
+                cmd.operational_mode = self._operational_mode.value
             cmd.operational_mode = self._operational_mode
             cmd.fan_speed = self._fan_speed
             cmd.swing_mode = self._swing_mode

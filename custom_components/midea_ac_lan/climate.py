@@ -96,7 +96,7 @@ class MideaACDevice(ClimateEntity, RestoreEntity):
         await self.device.apply()
 
     async def async_set_swing_mode(self, swing_mode: str) -> None:
-        self.device.swing_mode = AC.swing_mode_enum(swing_mode).value
+        self.device.swing_mode = AC.swing_mode_enum(swing_mode.upper()).value
         await self.device.apply()
 
     async def async_set_preset_mode(self, preset_mode: str) -> None:
@@ -143,7 +143,7 @@ class MideaACDevice(ClimateEntity, RestoreEntity):
     @property
     def hvac_mode(self) -> str:
         value = self.device.operational_mode.value
-        return self.hvac_modes[value-1]
+        return self.hvac_modes[value+1]
 
     @property
     def hvac_modes(self) -> list[str]:
