@@ -23,7 +23,8 @@ async def async_setup_platform(hass: HomeAssistant, config_entry: ConfigEntry, a
     _LOGGER.warning("%s devices_list found" % len(devices_list))
     for device in devices_list:
         if device["type"] == "ac":
-            ac_device = await Device(device["ip"], device["sn"], device["port"]).setup()
+            _LOGGER.warning(device)
+            ac_device = Device(device["ip"], device["device_id"], device["port"]).setup()
             await ac_device.refresh()
             entities.append(
                 MideaACDevice(hass, ac_device, 0.5)
