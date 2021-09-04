@@ -13,6 +13,15 @@ from .aiomart.aiomart import AC, Device
 from .aiomart.discover import scan
 
 SUPPORT_FLAGS = SUPPORT_TARGET_TEMPERATURE | SUPPORT_FAN_MODE | SUPPORT_SWING_MODE | SUPPORT_PRESET_MODE
+SUPPORTED_FEATURES_MAP = {
+    ATTR_TEMPERATURE: SUPPORT_TARGET_TEMPERATURE,
+    ATTR_TARGET_TEMP_HIGH: 30,
+    ATTR_TARGET_TEMP_LOW: 17,
+    ATTR_FAN_MODE: SUPPORT_FAN_MODE,
+    ATTR_SWING_MODE: SUPPORT_SWING_MODE,
+    ATTR_PRESET_MODE: SUPPORT_PRESET_MODE,
+}
+
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -46,6 +55,13 @@ class MideaACDevice(ClimateEntity, RestoreEntity):
         self._attr_target_temperature_low = 17
         self._attr_target_temperature = device.target_temperature
         self._attr_temperature_unit = TEMP_CELSIUS
+
+        features = 0
+        for f in SUPPORTED_FEATURES_MAP.keys():
+            features |= SUPPORTED_FEATURES_MAP[f]
+        for f in SUPPORTED_FEATURES_MAP.keys():
+            features |= SUPPORTED_FEATURES_MAP[f]
+        self._supported_features = features
 
     async def device_info(self) -> Optional[DeviceInfo]:
         return DeviceInfo(
@@ -122,3 +138,7 @@ class MideaACDevice(ClimateEntity, RestoreEntity):
     @property
     def hvac_modes(self) -> list[str]:
         return self.device.operational_mode.list()
+
+    @property
+    def supported_features(self) -> int:
+        return self._supported_features
