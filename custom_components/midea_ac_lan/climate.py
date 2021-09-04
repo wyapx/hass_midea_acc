@@ -35,6 +35,7 @@ async def async_setup_platform(hass: HomeAssistant, config_entry: ConfigEntry, a
     _LOGGER.warning("no devices loaded")
     return False
 
+
 class MideaACDevice(ClimateEntity, RestoreEntity):
     def __init__(self, hass: HomeAssistant, device: AC, temp_step: float):
         self.hass = hass
