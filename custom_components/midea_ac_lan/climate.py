@@ -18,21 +18,21 @@ _LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_platform(hass: HomeAssistant, config_entry: ConfigEntry, add_entities, discovery_info=None):
-    devices = await scan()
+    devices_list = await scan()
     entities = []
-    _LOGGER.warning("%s devices found" % len(devices))
-    for ip, data in devices.items():
-        if data["type"] == "ac":
-            device = await Device(ip, data["sn"], data["port"]).setup()
-            await device.refresh()
+    _LOGGER.warning("%s devices_list found" % len(devices_list))
+    for device in devices_list:
+        if device["type"] == "ac":
+            ac_device = await Device(device["ip"], device["sn"], device["port"]).setup()
+            await ac_device.refresh()
             entities.append(
-                MideaACDevice(hass, device, 0.5)
+                MideaACDevice(hass, ac_device, 0.5)
             )
     if len(entities) > 0:
         add_entities(entities)
-        _LOGGER.info("%s devices loaded" % len(entities))
+        _LOGGER.info("%s devices_list loaded" % len(entities))
         return True
-    _LOGGER.warning("no devices loaded")
+    _LOGGER.warning("no devices_list loaded")
     return False
 
 

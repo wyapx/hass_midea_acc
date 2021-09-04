@@ -4,7 +4,7 @@ import socket
 
 from msmart.security import security
 from asyncio import transports
-from typing import Tuple
+from typing import Tuple, List
 
 BROADCAST_MSG = bytearray([
     0x5a, 0x5a, 0x01, 0x11, 0x48, 0x00, 0x92, 0x00,
@@ -93,7 +93,7 @@ class DiscoverProtocol(asyncio.DatagramProtocol):
         self._future.set_result(self.found_devices)
 
 
-async def scan() -> dict:
+async def scan() -> List[dict]:
     loop = asyncio.get_event_loop()
     future = loop.create_future()
     await loop.create_datagram_endpoint(
